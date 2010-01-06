@@ -15,18 +15,15 @@ This file is part of Open CSTA.
     along with Open CSTA.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package org.opencsta.utils.blackbox;
-
+package org.opencsta.utils.dummypbx;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ClientSide implements Runnable{
+public class TCPServer implements Runnable{
 
         private ServerSocket clientSideConnectionSocket;
         private Socket client;
@@ -34,39 +31,32 @@ public class ClientSide implements Runnable{
         private DataOutputStream out ;
         private int line;
         private boolean runFlag = false ;
-        private NetworkBlackBox parent ;
+        private StringBuffer chris ;
+        private byte[] buf;
+        private DummyL5 parent ;
 
-private StringBuffer chris ;
-private byte[] buf;
-
-        public ClientSide(NetworkBlackBox _parent){
+        public TCPServer(DummyL5 _parent){
                 this.parent = _parent ;
                 chris = new StringBuffer() ;
                 buf = new byte[1024] ;
-                setRunFlag(true) ;
-                System.out.println("Client side initialising") ;
         }
 
         public void run() {
-                System.out.println("Starting clientside") ;
+                setRunFlag(true) ;
+                System.out.println("Starting DummyPBX") ;
                 try{
-                        clientSideConnectionSocket = new ServerSocket(5038);
+                        clientSideConnectionSocket = new ServerSocket(7000);
                 } catch (IOException e) {
                         System.out.println("Could not listen on port 7000");
                         System.exit(-1);
-                } catch (NullPointerException e){
-                    System.out.println( this.getClass().getName() + " Null Pointer Exception") ;
                 }
 
                 try{
                         client = clientSideConnectionSocket.accept();
                         System.out.println("Accepted a client connection") ;
-                        parent.clientHasConnected() ;
                 } catch (IOException e) {
                         System.out.println("Accept failed: 7000");
                         System.exit(-1);
-                } catch (NullPointerException e){
-                    System.out.println( this.getClass().getName() + " Null Pointer Exception") ;
                 }
 
                 try{
@@ -75,30 +65,23 @@ private byte[] buf;
                 } catch (IOException e) {
                         System.out.println("Accept failed: 4444");
                         System.exit(-1);
-                } catch (NullPointerException e){
-                    System.out.println( this.getClass().getName() + " Null Pointer Exception") ;
                 }
 
                 while(runFlag){
                         try{
+                                buf = new byte[1024] ;
                                 line = in.read(buf);
                                 System.out.println(line + " bytes received") ;
                                 buf2SBChris(line) ;
-//                              line = in.read();
-//                              chris.append((char)line) ;
-//                              //Send data to server side
-//                              System.out.println("Sending: ") ;
-//                              System.out.print( Integer.toHexString(line) + " ") ;
-//                              parent.clientSideToServerSide(line);
                         } catch (IOException e) {
                                 System.out.println("Read failed");
-                                System.exit(-1);
-                        } catch (NullPointerException e){
-                               System.out.println( this.getClass().getName() + " Null Pointer Exception") ;
+                                this.setRunFlag(false) ;
+                                parent.setRunFlag(false) ;
                         }
-                        parent.clientSideToServerSide(new String(chris) ) ;
                 }
+                System.out.println("Run Flag for the TCP Server has been set to false") ;
         }
+
         public boolean isRunFlag() {
                 return runFlag;
         }
@@ -107,38 +90,15 @@ private byte[] buf;
                 this.runFlag = runFlag;
         }
 
-        public void receiveData(int line){
-                char[] chbyte = {(char)line} ;
-                try {
-                        out.writeBytes(new String(chbyte) ) ;
-                } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                } catch (NullPointerException e){
-                    System.out.println( this.getClass().getName() + " Null Pointer Exception") ;
-                }
-        }
-
-        public void receiveData(String str_rec){
+        public void send(String str_rec){
                 try {
                         out.writeBytes( str_rec ) ;
                 } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (NullPointerException e){
-                    e.printStackTrace() ;
+                        e.printStackTrace();
                 }
-        }
-
-        public void TestChris(StringBuffer cm){
-                System.out.print("Client ---> Server | S: ") ;
-                for( int i = 0 ; i < cm.length() ; i++ ){
-                        System.out.print( Integer.toHexString((char)cm.charAt(i)) + " " ) ;
-                }
-                System.out.println("") ;
         }
 
         private void buf2SBChris(int length){
-                chris = new StringBuffer();
                 for( int i = 0 ; i < length ; i++){
 
             if( (short)buf[i] < 0 ){
@@ -150,10 +110,62 @@ private byte[] buf;
                 append2chris( (int) b.intValue() ) ;
             }
                 }
-                TestChris(chris) ;
+                if( chris.length() > 5 ){
+                        if( isBufferResetableAndEven(chris) ){
+                                parent.addWorkIN(new StringBuffer(chris)) ;
+                                chris = new StringBuffer() ;
+                        }
+                        else if( isBufferStillReading(chris) ){
+                                ;
+                        }
+                        else if( isBufferHoldingMoreThanOneMessage(chris) ){
+                                parent.addWorkIN(new StringBuffer( chris.substring(0, ((int)chris.charAt(2) + 3 + 1)) )) ;
+                                synchronized( parent ){
+                                        parent.notify() ;
+                                }
+                                chris = new StringBuffer(chris.substring( ((int)chris.charAt(2) + 3)))  ;
+                        }
+                }
+        }
+
+        private boolean isBufferResetableAndEven(StringBuffer sb){
+                if( chris.length() == ((int)chris.charAt(2) + 3) ){
+                    //TODO make a better check for length implemented here
+                    TestChris(sb,"TCPServer:118:isBufferResetableAndEven") ;
+                    return true ;
+                }
+                return false ;
+        }
+
+        private boolean isBufferHoldingMoreThanOneMessage(StringBuffer sb){
+                if( chris.length() > ((int)chris.charAt(2) + 3) ){
+                        return true ;
+                }
+                return false ;
+        }
+
+        private boolean isBufferStillReading(StringBuffer sb){
+                if( chris.length() < ((int)chris.charAt(2) + 3) ){
+                        return true ;
+                }
+                return false ;
         }
 
         private void append2chris(int thisByte){
                 chris.append((char)thisByte) ;
         }
+
+        public void TestChris(StringBuffer cm,String msg){
+            System.out.println("TEST: " + msg ) ;
+            TestChris(cm) ;
+        }
+
+        public void TestChris(StringBuffer cm){
+                System.out.print("CSTAServer ---> DummyPBX | R: ") ;
+                for( int i = 0 ; i < cm.length() ; i++ ){
+                        System.out.print( Integer.toHexString((char)cm.charAt(i)) + " " ) ;
+                }
+                System.out.println("") ;
+        }
+
 }
