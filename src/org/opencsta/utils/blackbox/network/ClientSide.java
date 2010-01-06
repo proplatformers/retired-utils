@@ -21,13 +21,12 @@ package org.opencsta.utils.blackbox.network;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Properties;
 
 public class ClientSide implements Runnable{
-
+        private Properties properties ;
         private ServerSocket clientSideConnectionSocket;
         private Socket client;
         private DataInputStream in;
@@ -35,24 +34,41 @@ public class ClientSide implements Runnable{
         private int line;
         private boolean runFlag = false ;
         private NetworkBlackBox parent ;
+        private StringBuffer chris ;
+        private byte[] buf;
+        private String portNumber ;
 
-private StringBuffer chris ;
-private byte[] buf;
-
-        public ClientSide(NetworkBlackBox _parent){
+        public ClientSide(NetworkBlackBox _parent, Properties _props){
                 this.parent = _parent ;
+                this.properties = _props ;
+                setProperties() ;
                 chris = new StringBuffer() ;
                 buf = new byte[1024] ;
                 setRunFlag(true) ;
                 System.out.println("Client side initialising") ;
         }
 
+        private void setProperties(){
+            try{
+                portNumber = properties.getProperty("CLIENTSIDE_LISTENER_PORTNUMBER") ;
+            }catch(NullPointerException e){
+                e.printStackTrace();
+                System.exit(1) ;
+            }catch(SecurityException e){
+                e.printStackTrace() ;
+                System.exit(1) ;
+            }catch(IllegalArgumentException e){
+                e.printStackTrace();
+                System.exit(1) ;
+            }
+        }
+
         public void run() {
                 System.out.println("Starting clientside") ;
                 try{
-                        clientSideConnectionSocket = new ServerSocket(5038);
+                        clientSideConnectionSocket = new ServerSocket(Integer.parseInt(portNumber));
                 } catch (IOException e) {
-                        System.out.println("Could not listen on port 7000");
+                        System.out.println("Could not listen on port " + portNumber);
                         System.exit(-1);
                 } catch (NullPointerException e){
                     System.out.println( this.getClass().getName() + " Null Pointer Exception") ;
@@ -63,7 +79,7 @@ private byte[] buf;
                         System.out.println("Accepted a client connection") ;
                         parent.clientHasConnected() ;
                 } catch (IOException e) {
-                        System.out.println("Accept failed: 7000");
+                        System.out.println("Accept failed: " + portNumber);
                         System.exit(-1);
                 } catch (NullPointerException e){
                     System.out.println( this.getClass().getName() + " Null Pointer Exception") ;
@@ -73,7 +89,7 @@ private byte[] buf;
                         in = new DataInputStream(client.getInputStream());
                         out = new DataOutputStream( client.getOutputStream() );
                 } catch (IOException e) {
-                        System.out.println("Accept failed: 4444");
+                        System.out.println("Accept failed: " + portNumber);
                         System.exit(-1);
                 } catch (NullPointerException e){
                     System.out.println( this.getClass().getName() + " Null Pointer Exception") ;

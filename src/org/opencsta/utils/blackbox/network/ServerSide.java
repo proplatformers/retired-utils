@@ -27,30 +27,51 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Properties;
 
 public class ServerSide implements Runnable{
-
+        private Properties properties ;
         private Socket serverSideConnectionSocket;
          DataOutputStream out;
          DataInputStream in;
         private boolean runFlag;
         private NetworkBlackBox parent ;
-
         private int line;
         private StringBuffer chris ;
         private byte[] buf;
+        private String portNumber ;
+        private String host ;
 
-        public ServerSide(NetworkBlackBox _parent){
+        public ServerSide(NetworkBlackBox _parent,Properties _props){
                 this.parent = _parent ;
+                this.properties = _props ;
+                setProperties() ;
                 chris = new StringBuffer() ;
                 buf = new byte[1024] ;
                 setRunFlag(true) ;
         }
 
+        private void setProperties(){
+            try{
+                portNumber = properties.getProperty("SERVERSIDE_TARGET_PORTNUMBER") ;
+                host = properties.getProperty("SERVERSIDE_TARGET_HOST") ;
+                System.out.println("Serverside connecting to host:portnumber " + host + ":" + portNumber ) ;
+            }catch(NullPointerException e){
+                e.printStackTrace();
+                System.exit(1) ;
+            }catch(SecurityException e){
+                e.printStackTrace() ;
+                System.exit(1) ;
+            }catch(IllegalArgumentException e){
+                e.printStackTrace();
+                System.exit(1) ;
+            }
+        }
+
         public void run() {
                 System.out.println("Connecting to Hipath") ;
                 try{
-                        serverSideConnectionSocket = new Socket("tour.opencsta.org", 5038);
+                        serverSideConnectionSocket = new Socket(host, Integer.parseInt(portNumber));
                         out = new DataOutputStream( serverSideConnectionSocket.getOutputStream() );
                         in = new DataInputStream( serverSideConnectionSocket.getInputStream() );
                 } catch (UnknownHostException e) {
