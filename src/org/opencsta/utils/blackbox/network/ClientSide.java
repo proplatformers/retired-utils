@@ -18,8 +18,6 @@ This file is part of Open CSTA.
 package org.opencsta.utils.blackbox.network;
 
 
-
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
