@@ -17,13 +17,15 @@ This file is part of Open CSTA.
 
 package org.opencsta.utils.blackbox.network;
 
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Properties;
+
+
+
 
 public class ClientSide implements Runnable{
         private Properties properties ;
