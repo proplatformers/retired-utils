@@ -25,7 +25,7 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 //import au.com.mrvoip.oscsta.server.CSTAServer;
 
-public class NetworkBlackBox {
+public class NetworkBlackBox implements CSInterface{
         private Properties properties ;
         private ClientSide clientSide ;
         private ServerSide serverSide ;
