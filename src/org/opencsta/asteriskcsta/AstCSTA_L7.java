@@ -78,6 +78,7 @@ public class AstCSTA_L7 extends CSTA_Base{
 
             }
         }
+        asteriskcstaserver.connectAMI(ami_username,ami_password) ;
     }
 
     /**
