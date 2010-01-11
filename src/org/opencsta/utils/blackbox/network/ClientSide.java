@@ -23,11 +23,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Properties;
+import org.apache.log4j.Logger;
 
 
 
 
 public class ClientSide implements Runnable{
+        protected static Logger bblog = Logger.getLogger(org.opencsta.utils.blackbox.network.ClientSide.class) ;
         private Properties properties ;
         private ServerSocket clientSideConnectionSocket;
         private Socket client;
@@ -47,7 +49,7 @@ public class ClientSide implements Runnable{
                 chris = new StringBuffer() ;
                 buf = new byte[1024] ;
                 setRunFlag(true) ;
-                System.out.println("Client side initialising") ;
+                bblog.info("Client side initialising") ;
         }
 
         private void setProperties(){
@@ -66,53 +68,53 @@ public class ClientSide implements Runnable{
         }
 
         public void run() {
-                System.out.println("Starting clientside") ;
+                bblog.info("Starting clientside") ;
                 try{
                         clientSideConnectionSocket = new ServerSocket(Integer.parseInt(portNumber));
                 } catch (IOException e) {
-                        System.out.println("Could not listen on port " + portNumber);
+                        bblog.info("Could not listen on port " + portNumber);
                         System.exit(-1);
                 } catch (NullPointerException e){
-                    System.out.println( this.getClass().getName() + " Null Pointer Exception") ;
+                    bblog.info( this.getClass().getName() + " Null Pointer Exception") ;
                 }
 
                 try{
                         client = clientSideConnectionSocket.accept();
-                        System.out.println("Accepted a client connection") ;
+                        bblog.info("Accepted a client connection") ;
                         parent.clientHasConnected() ;
                 } catch (IOException e) {
-                        System.out.println("Accept failed: " + portNumber);
+                        bblog.info("Accept failed: " + portNumber);
                         System.exit(-1);
                 } catch (NullPointerException e){
-                    System.out.println( this.getClass().getName() + " Null Pointer Exception") ;
+                    bblog.info( this.getClass().getName() + " Null Pointer Exception") ;
                 }
 
                 try{
                         in = new DataInputStream(client.getInputStream());
                         out = new DataOutputStream( client.getOutputStream() );
                 } catch (IOException e) {
-                        System.out.println("Accept failed: " + portNumber);
+                        bblog.info("Accept failed: " + portNumber);
                         System.exit(-1);
                 } catch (NullPointerException e){
-                    System.out.println( this.getClass().getName() + " Null Pointer Exception") ;
+                    bblog.info( this.getClass().getName() + " Null Pointer Exception") ;
                 }
 
                 while(runFlag){
                         try{
                                 line = in.read(buf);
-                                System.out.println(line + " bytes received") ;
+                                bblog.info(line + " bytes received") ;
                                 buf2SBChris(line) ;
 //                              line = in.read();
 //                              chris.append((char)line) ;
 //                              //Send data to server side
-//                              System.out.println("Sending: ") ;
+//                              bblog.info("Sending: ") ;
 //                              System.out.print( Integer.toHexString(line) + " ") ;
 //                              parent.clientSideToServerSide(line);
                         } catch (IOException e) {
-                                System.out.println("Read failed");
+                                bblog.info("Read failed");
                                 System.exit(-1);
                         } catch (NullPointerException e){
-                               System.out.println( this.getClass().getName() + " Null Pointer Exception") ;
+                               bblog.info( this.getClass().getName() + " Null Pointer Exception") ;
                         }
                         parent.clientSideToServerSide(new String(chris) ) ;
                 }
@@ -133,7 +135,7 @@ public class ClientSide implements Runnable{
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                 } catch (NullPointerException e){
-                    System.out.println( this.getClass().getName() + " Null Pointer Exception") ;
+                    bblog.info( this.getClass().getName() + " Null Pointer Exception") ;
                 }
         }
 
@@ -152,7 +154,7 @@ public class ClientSide implements Runnable{
                 for( int i = 0 ; i < cm.length() ; i++ ){
                         System.out.print( Integer.toHexString((char)cm.charAt(i)) + " " ) ;
                 }
-                System.out.println("") ;
+                bblog.info("") ;
         }
 
         private void buf2SBChris(int length){

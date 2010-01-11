@@ -44,7 +44,7 @@ public class NetworkBlackBox implements CSInterface{
     private static Properties loadPropertiesFromFile(String filename){
         FileInputStream is ;
         try {
-            System.out.println("Trying to load properties from:  " + System.getProperty("user.dir") + "/" + filename) ;
+            bblog.info("Trying to load properties from:  " + System.getProperty("user.dir") + "/" + filename) ;
             is = new FileInputStream( (System.getProperty("user.dir") + "/"+filename) );
             Properties props = new Properties() ;
             props.load(is) ;

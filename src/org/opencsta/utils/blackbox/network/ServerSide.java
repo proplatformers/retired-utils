@@ -28,8 +28,10 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Properties;
+import org.apache.log4j.Logger;
 
 public class ServerSide implements Runnable{
+        protected static Logger bblog = Logger.getLogger(org.opencsta.utils.blackbox.network.ServerSide.class) ;
         private Properties properties ;
         private Socket serverSideConnectionSocket;
          DataOutputStream out;
