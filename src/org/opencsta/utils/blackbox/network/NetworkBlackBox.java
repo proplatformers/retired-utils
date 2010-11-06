@@ -13,81 +13,148 @@ This file is part of Open CSTA.
 
     You should have received a copy of the GNU Lesser General Public License
     along with Open CSTA.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package org.opencsta.utils.blackbox.network;
-
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 import org.apache.log4j.Logger;
-//import au.com.mrvoip.oscsta.server.CSTAServer;
 
-public class NetworkBlackBox implements CSInterface{
-        private Properties properties ;
-        private ClientSide clientSide ;
-        private ServerSide serverSide ;
-        private static Thread clientSideThread ;
-        private static Thread serverSideThread ;
-        protected static Logger bblog = Logger.getLogger(org.opencsta.utils.blackbox.network.NetworkBlackBox.class) ;
-        public static void main(String[] args) {
+/**
+ * @author chrismylonas
+ * 
+ */
+public class NetworkBlackBox implements CSInterface {
 
-                NetworkBlackBox netbb = new NetworkBlackBox() ;
-        }
-        
-    private static Properties loadPropertiesFromFile(){
-        return loadPropertiesFromFile("networkblackbox.conf") ;
-    }
+	/**
+	 * 
+	 */
+	protected static Logger bblog = Logger
+			.getLogger(org.opencsta.utils.blackbox.network.NetworkBlackBox.class);
 
-    private static Properties loadPropertiesFromFile(String filename){
-        FileInputStream is ;
-        try {
-            bblog.info("Trying to load properties from:  " + System.getProperty("user.dir") + "/" + filename) ;
-            is = new FileInputStream( (System.getProperty("user.dir") + "/"+filename) );
-            Properties props = new Properties() ;
-            props.load(is) ;
-            return props ;
-        }catch (FileNotFoundException ex) {
-            ex.printStackTrace() ;
-            System.exit(1);
-        } catch (IOException ex) {
-            ex.printStackTrace() ;
-            System.exit(1) ;
-        }
-        return null ;
-    }
+	/**
+	 * 
+	 */
+	private Properties properties;
 
-        public NetworkBlackBox(){
-                properties = loadPropertiesFromFile() ;
-                clientSide = new ClientSide(this,properties) ;
-                clientSideThread = new Thread(clientSide, "Client Side Thread") ;
-                serverSide = new ServerSide(this,properties) ;
-                serverSideThread = new Thread(serverSide, "Server Side Thread") ;
-                clientSideThread.start();
-//                serverSideThread.start();
+	/**
+	 * 
+	 */
+	private ClientSide clientSide;
 
+	/**
+	 * 
+	 */
+	private ServerSide serverSide;
 
-        }
+	/**
+	 * 
+	 */
+	private static Thread clientSideThread;
 
-        public void clientHasConnected(){
-            serverSideThread.start();
-        }
+	/**
+	 * 
+	 */
+	private static Thread serverSideThread;
 
-        public void clientSideToServerSide(String str_data){
-                serverSide.sendData(str_data) ;
-        }
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
 
-        public void clientSideToServerSide(int char_data){
-                serverSide.sendData(char_data) ;
-        }
+		NetworkBlackBox netbb = new NetworkBlackBox();
+	}
 
-        public void serverSideToClientSide(String str_data){
-                clientSide.receiveData(str_data) ;
-        }
+	/**
+	 * @return
+	 */
+	private static Properties loadPropertiesFromFile() {
+		return loadPropertiesFromFile("networkblackbox.conf");
+	}
 
-        public void serverSideToClientSide(int char_data){
-                clientSide.receiveData(char_data) ;
-        }
+	/**
+	 * @param filename
+	 * @return
+	 */
+	private static Properties loadPropertiesFromFile(String filename) {
+		FileInputStream is;
+		try {
+			bblog.info("Trying to load properties from:  "
+					+ System.getProperty("user.dir") + "/" + filename);
+			is = new FileInputStream(
+					(System.getProperty("user.dir") + "/" + filename));
+			Properties props = new Properties();
+			props.load(is);
+			return props;
+		} catch (FileNotFoundException ex) {
+			ex.printStackTrace();
+			System.exit(1);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			System.exit(1);
+		}
+		return null;
+	}
+
+	/**
+	 * 
+	 */
+	public NetworkBlackBox() {
+		properties = loadPropertiesFromFile();
+		clientSide = new ClientSide(this, properties);
+		clientSideThread = new Thread(clientSide, "Client Side Thread");
+		serverSide = new ServerSide(this, properties);
+		serverSideThread = new Thread(serverSide, "Server Side Thread");
+		clientSideThread.start();
+		// serverSideThread.start();
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencsta.utils.blackbox.network.CSInterface#clientHasConnected()
+	 */
+	public void clientHasConnected() {
+		serverSideThread.start();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.opencsta.utils.blackbox.network.CSInterface#clientSideToServerSide
+	 * (java.lang.String)
+	 */
+	public void clientSideToServerSide(String str_data) {
+		serverSide.sendData(str_data);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.opencsta.utils.blackbox.network.CSInterface#clientSideToServerSide
+	 * (int)
+	 */
+	public void clientSideToServerSide(int char_data) {
+		serverSide.sendData(char_data);
+	}
+
+	/**
+	 * @param str_data
+	 */
+	public void serverSideToClientSide(String str_data) {
+		clientSide.receiveData(str_data);
+	}
+
+	/**
+	 * @param char_data
+	 */
+	public void serverSideToClientSide(int char_data) {
+		clientSide.receiveData(char_data);
+	}
 }

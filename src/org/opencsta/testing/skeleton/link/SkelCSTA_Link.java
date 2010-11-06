@@ -13,7 +13,7 @@ This file is part of Open CSTA.
 
     You should have received a copy of the GNU Lesser General Public License
     along with Open CSTA.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package org.opencsta.testing.skeleton.link;
 
@@ -21,14 +21,26 @@ import org.apache.log4j.Logger;
 import org.opencsta.testing.skeleton.server.SkelCSTA_Layer5;
 
 /**
- *
- * @author cm
+ * 
+ * @author chrismylonas
  */
 public abstract class SkelCSTA_Link implements Runnable {
-    protected static Logger linklog = Logger.getLogger(SkelCSTA_Link.class) ;
-    private SkelCSTA_Layer5 layer5 ;
-    public SkelCSTA_Link(SkelCSTA_Layer5 cstastack){
-        linklog.info("Creating SkelCSTA_Link") ;
-        this.layer5 = cstastack ;
-    }
+
+	/**
+	 * 
+	 */
+	protected static Logger linklog = Logger.getLogger(SkelCSTA_Link.class);
+
+	/**
+	 * 
+	 */
+	private SkelCSTA_Layer5 layer5;
+
+	/**
+	 * @param cstastack
+	 */
+	public SkelCSTA_Link(SkelCSTA_Layer5 cstastack) {
+		linklog.info("Creating SkelCSTA_Link");
+		this.layer5 = cstastack;
+	}
 }

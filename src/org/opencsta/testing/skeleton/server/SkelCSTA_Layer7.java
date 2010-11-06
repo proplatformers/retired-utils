@@ -13,24 +13,40 @@ This file is part of Open CSTA.
 
     You should have received a copy of the GNU Lesser General Public License
     along with Open CSTA.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package org.opencsta.testing.skeleton.server;
 
 import org.apache.log4j.Logger;
 
 /**
- *
- * @author cm
+ * 
+ * @author chrismylonas
  */
 public class SkelCSTA_Layer7 {
-    protected static Logger skellog = Logger.getLogger(SkelCSTAServer.class) ;
-    private SkelCSTAServer server ;
-    private SkelCSTA_Layer5 layer5 ;
-    public SkelCSTA_Layer7(SkelCSTAServer serv){
-        skellog.info("Creating Layer 7") ;
-        this.server = serv ;
-        layer5 = new SkelCSTA_Layer5(this) ;
-    }
+
+	/**
+	 * 
+	 */
+	protected static Logger skellog = Logger.getLogger(SkelCSTAServer.class);
+
+	/**
+	 * 
+	 */
+	private SkelCSTAServer server;
+
+	/**
+	 * 
+	 */
+	private SkelCSTA_Layer5 layer5;
+
+	/**
+	 * @param serv
+	 */
+	public SkelCSTA_Layer7(SkelCSTAServer serv) {
+		skellog.info("Creating Layer 7");
+		this.server = serv;
+		layer5 = new SkelCSTA_Layer5(this);
+	}
 
 }

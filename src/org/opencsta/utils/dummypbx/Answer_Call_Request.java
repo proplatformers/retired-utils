@@ -13,25 +13,40 @@ This file is part of Open CSTA.
 
     You should have received a copy of the GNU Lesser General Public License
     along with Open CSTA.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package org.opencsta.utils.dummypbx;
 
 /**
- *
- * @author cm
+ * 
+ * @author chrismylonas
  */
-public class Answer_Call_Request extends CSTARequest implements Runnable{
-    char service_id ;
+public class Answer_Call_Request extends CSTARequest implements Runnable {
 
-    public Answer_Call_Request() {
-    }
+	/**
+	 * 
+	 */
+	char service_id;
 
-    public Answer_Call_Request(char service_id) {
-        this.service_id = service_id;
-    }
+	/**
+     * 
+     */
+	public Answer_Call_Request() {
+	}
 
-    public void run(){
-        super.setService_id(service_id);
-    }
+	/**
+	 * @param service_id
+	 */
+	public Answer_Call_Request(char service_id) {
+		this.service_id = service_id;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencsta.utils.dummypbx.CSTARequest#run()
+	 */
+	public void run() {
+		super.setService_id(service_id);
+	}
 }

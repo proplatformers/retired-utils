@@ -13,7 +13,7 @@ This file is part of Open CSTA.
 
     You should have received a copy of the GNU Lesser General Public License
     along with Open CSTA.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package org.opencsta.testing.skeleton.server;
 
@@ -22,24 +22,41 @@ import org.opencsta.testing.skeleton.link.SkelCSTA_Link;
 import org.opencsta.testing.skeleton.link.network.SkelCSTA_Link_NetworkTest;
 
 /**
- *
- * @author cm
+ * 
+ * @author chrismylonas
  */
 public class SkelCSTA_Layer5 {
-        protected static Logger skellog = Logger.getLogger(SkelCSTAServer.class) ;
-        private SkelCSTA_Layer7 layer7 ;
-        private SkelCSTA_Link cstalink ;
-        private Thread linkThread ;
 
-        
-        public SkelCSTA_Layer5(SkelCSTA_Layer7 l7){
-            skellog.info("Creating Layer 5") ;
-            this.layer7 = l7 ;
-            cstalink = new SkelCSTA_Link_NetworkTest(this) ;
-            linkThread = new Thread(cstalink,"CSTA Link Thread") ;
-            skellog.info("CSTA Link Thread created.  Starting ...") ;
-            linkThread.start();
-        }
+	/**
+	 * 
+	 */
+	protected static Logger skellog = Logger.getLogger(SkelCSTAServer.class);
 
+	/**
+	 * 
+	 */
+	private SkelCSTA_Layer7 layer7;
+
+	/**
+	 * 
+	 */
+	private SkelCSTA_Link cstalink;
+
+	/**
+	 * 
+	 */
+	private Thread linkThread;
+
+	/**
+	 * @param l7
+	 */
+	public SkelCSTA_Layer5(SkelCSTA_Layer7 l7) {
+		skellog.info("Creating Layer 5");
+		this.layer7 = l7;
+		cstalink = new SkelCSTA_Link_NetworkTest(this);
+		linkThread = new Thread(cstalink, "CSTA Link Thread");
+		skellog.info("CSTA Link Thread created.  Starting ...");
+		linkThread.start();
+	}
 
 }

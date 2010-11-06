@@ -13,30 +13,43 @@ This file is part of Open CSTA.
 
     You should have received a copy of the GNU Lesser General Public License
     along with Open CSTA.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package org.opencsta.testing.skeleton.server;
 
 import org.apache.log4j.Logger;
 
 /**
- *
- * @author cm
+ * 
+ * @author chrismylonas
  */
 public class SkelCSTAServer implements Runnable {
-    protected static Logger skellog = Logger.getLogger(SkelCSTAServer.class) ;
 
-    private SkelCSTA_Layer7 layer7 ;
-    
-    public SkelCSTAServer(){
-        skellog.info("Starting SkelCSTAServer") ;
-        layer7 = new SkelCSTA_Layer7(this) ;
-    }
+	/**
+	 * 
+	 */
+	protected static Logger skellog = Logger.getLogger(SkelCSTAServer.class);
 
-    public void run() {
-        skellog.info("SkelCSTAServer run loop") ;
-    }
-    
-    
+	/**
+     * 
+     */
+	private SkelCSTA_Layer7 layer7;
+
+	/**
+     * 
+     */
+	public SkelCSTAServer() {
+		skellog.info("Starting SkelCSTAServer");
+		layer7 = new SkelCSTA_Layer7(this);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
+	public void run() {
+		skellog.info("SkelCSTAServer run loop");
+	}
 
 }

@@ -13,7 +13,7 @@ This file is part of Open CSTA.
 
     You should have received a copy of the GNU Lesser General Public License
     along with Open CSTA.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package org.opencsta.utils.dummypbx;
 
@@ -21,59 +21,108 @@ import org.opencsta.servicetools.asterisk.AsteriskInterest;
 import org.opencsta.servicedescription.objects.cstaparamtypes.deviceidentifiers.DeviceID;
 
 /**
- *
- * @author cm
+ * 
+ * @author chrismylonas
  */
-public class Make_Call_Request extends CSTARequest implements Runnable{
-    private char service_id ;
-    private final String service_name = "Make Call";
-    private DeviceID from ;
-    private DeviceID to ;
-    private StringBuffer str ;
-    public Make_Call_Request(){
-        service_id = 0x0a ;
-    }
+public class Make_Call_Request extends CSTARequest implements Runnable {
 
-    public Make_Call_Request(char service_id) {
-        this.service_id = service_id;
-    }
+	/**
+	 * 
+	 */
+	private char service_id;
 
-    public Make_Call_Request(StringBuffer sb){
-        this.setStr(str);
-    }
+	/**
+	 * 
+	 */
+	private final String service_name = "Make Call";
 
-    public void run(){
-        convert() ;
-    }
+	/**
+	 * 
+	 */
+	private DeviceID from;
 
-    private void convert(){
-        
-    }
+	/**
+	 * 
+	 */
+	private DeviceID to;
 
-    public StringBuffer toCSTAASN1(){
-        StringBuffer str = new StringBuffer() ;
-//        str = Device(str, dev2) ; //DEVICE TO
-//        str = Device(str, dev1) ; //DEVICE FROM
-//        str = Sequence(str) ;
-//        str = str.insert(0,id) ; //SERVICE ID
-        return str ;
-    }
+	/**
+	 * 
+	 */
+	private StringBuffer str;
 
-    public String toCSTAXML(){
-        return "" ;
-    }
+	/**
+	 * 
+	 */
+	public Make_Call_Request() {
+		service_id = 0x0a;
+	}
 
-    /**
-     * @return the str
+	/**
+	 * @param service_id
+	 */
+	public Make_Call_Request(char service_id) {
+		this.service_id = service_id;
+	}
+
+	/**
+	 * @param sb
+	 */
+	public Make_Call_Request(StringBuffer sb) {
+		this.setStr(str);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencsta.utils.dummypbx.CSTARequest#run()
+	 */
+	public void run() {
+		convert();
+	}
+
+	/**
+     * 
      */
-    public StringBuffer getStr() {
-        return str;
-    }
+	private void convert() {
 
-    /**
-     * @param str the str to set
-     */
-    public void setStr(StringBuffer str) {
-        this.str = str;
-    }
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencsta.utils.dummypbx.CSTARequest#toCSTAASN1()
+	 */
+	public StringBuffer toCSTAASN1() {
+		StringBuffer str = new StringBuffer();
+		// str = Device(str, dev2) ; //DEVICE TO
+		// str = Device(str, dev1) ; //DEVICE FROM
+		// str = Sequence(str) ;
+		// str = str.insert(0,id) ; //SERVICE ID
+		return str;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencsta.utils.dummypbx.CSTARequest#toCSTAXML()
+	 */
+	public String toCSTAXML() {
+		return "";
+	}
+
+	/**
+	 * @return the str
+	 */
+	public StringBuffer getStr() {
+		return str;
+	}
+
+	/**
+	 * @param str
+	 *            the str to set
+	 */
+	public void setStr(StringBuffer str) {
+		this.str = str;
+	}
 }

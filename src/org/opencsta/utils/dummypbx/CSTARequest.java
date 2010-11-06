@@ -13,46 +13,65 @@ This file is part of Open CSTA.
 
     You should have received a copy of the GNU Lesser General Public License
     along with Open CSTA.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package org.opencsta.utils.dummypbx;
 
 /**
- *
- * @author cm
+ * 
+ * @author chrismylonas
  */
-public class CSTARequest implements Runnable{
-    protected char service_id ;
-    public void run(){
-        
-    }
+public class CSTARequest implements Runnable {
 
-    /**
-     * @return the service_id
-     */
-    public char getService_id() {
-        return service_id;
-    }
+	/**
+	 * 
+	 */
+	protected char service_id;
 
-    /**
-     * @param service_id the service_id to set
-     */
-    public void setService_id(char service_id) {
-        this.service_id = service_id;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
+	public void run() {
 
-    public String toString(){
+	}
 
-        return "" ;
-    }
+	/**
+	 * @return the service_id
+	 */
+	public char getService_id() {
+		return service_id;
+	}
 
-    public String toCSTAXML(){
+	/**
+	 * @param service_id
+	 *            the service_id to set
+	 */
+	public void setService_id(char service_id) {
+		this.service_id = service_id;
+	}
 
-        return "" ;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return "";
+	}
 
-    public StringBuffer toCSTAASN1(){
+	/**
+	 * @return
+	 */
+	public String toCSTAXML() {
+		return "";
+	}
 
-        return new StringBuffer() ;
-    }
+	/**
+	 * @return
+	 */
+	public StringBuffer toCSTAASN1() {
+		return new StringBuffer();
+	}
 }

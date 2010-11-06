@@ -13,7 +13,7 @@ This file is part of Open CSTA.
 
     You should have received a copy of the GNU Lesser General Public License
     along with Open CSTA.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package org.opencsta.testing.skeleton.link.network;
 
@@ -21,16 +21,25 @@ import org.opencsta.testing.skeleton.link.SkelCSTA_Link;
 import org.opencsta.testing.skeleton.server.SkelCSTA_Layer5;
 
 /**
- *
- * @author cm
+ * 
+ * @author chrismylonas
  */
-public class SkelCSTA_Link_NetworkTest extends SkelCSTA_Link{
-    public SkelCSTA_Link_NetworkTest(SkelCSTA_Layer5 stack){
-        super(stack) ;
-    }
-    
-    public void run() {
-        linklog.info("SkelCSTA_Link run loop") ;
-    }
+public class SkelCSTA_Link_NetworkTest extends SkelCSTA_Link {
+
+	/**
+	 * @param stack
+	 */
+	public SkelCSTA_Link_NetworkTest(SkelCSTA_Layer5 stack) {
+		super(stack);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
+	public void run() {
+		linklog.info("SkelCSTA_Link run loop");
+	}
 
 }

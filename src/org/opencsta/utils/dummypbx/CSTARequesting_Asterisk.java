@@ -13,7 +13,7 @@ This file is part of Open CSTA.
 
     You should have received a copy of the GNU Lesser General Public License
     along with Open CSTA.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package org.opencsta.utils.dummypbx;
 
@@ -26,68 +26,109 @@ import org.apache.log4j.Logger;
 import org.asteriskjava.manager.event.ManagerEvent;
 
 /**
- *
- * @author cm
+ * 
+ * @author chrismylonas
  */
-public class CSTARequesting_Asterisk implements AsteriskInterest,Runnable{
-    Logger alog = Logger.getLogger(DummyPBX.class.getName()) ;
-    private AsteriskController ast ;
-    private List<CSTARequest> cstaRequests ;
-    public CSTARequesting_Asterisk(String _host){
-        ast = new AsteriskController(this, _host) ;
-        try {
-            ast.HelloManager();
-        } catch (IOException ex) {
-            alog.error(ex.toString()) ;
-        }
-        Init() ;
-    }
+public class CSTARequesting_Asterisk implements AsteriskInterest, Runnable {
 
-    private void Init(){
-        publicPreInit() ;
-        initialise() ;
-        publicPostInit() ;
-    }
+	/**
+	 * 
+	 */
+	Logger alog = Logger.getLogger(DummyPBX.class.getName());
 
-    public void publicPreInit(){
+	/**
+	 * 
+	 */
+	private AsteriskController ast;
 
-    }
+	/**
+	 * 
+	 */
+	private List<CSTARequest> cstaRequests;
 
-    public void publicPostInit(){
+	/**
+	 * @param _host
+	 */
+	public CSTARequesting_Asterisk(String _host) {
+		ast = new AsteriskController(this, _host);
+		try {
+			ast.HelloManager();
+		} catch (IOException ex) {
+			alog.error(ex.toString());
+		}
+		Init();
+	}
 
-    }
+	/**
+	 * 
+	 */
+	private void Init() {
+		publicPreInit();
+		initialise();
+		publicPostInit();
+	}
 
-    private void initialise(){
+	/**
+	 * 
+	 */
+	public void publicPreInit() {
 
-    }
-    
-    public void run(){
-        while( ast.isLoggedIn() ){
-            try {
-                System.out.println("Waiting for RQs") ;
-                    if( cstaRequests.size() > 0 ){
+	}
 
-                    }
-                    Thread.currentThread().sleep(2000) ;
+	/**
+	 * 
+	 */
+	public void publicPostInit() {
 
-                } catch (InterruptedException e) {
+	}
 
-                    e.printStackTrace();
-                }
-        }
-    }
+	/**
+	 * 
+	 */
+	private void initialise() {
 
-    public void addCSTARequest(CSTARequest creq){
-        cstaRequests.add(creq);
-    }
+	}
 
-    public void AsteriskManagerEventReceived(ManagerEvent me) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
+	public void run() {
+		while (ast.isLoggedIn()) {
+			try {
+				System.out.println("Waiting for RQs");
+				if (cstaRequests.size() > 0) {
 
-    public void CallControlService(CSTARequest cstareq){
-        //ast call generic function which passes arguments in List,Hashtable!
+				}
+				Thread.currentThread().sleep(2000);
 
-    }
+			} catch (InterruptedException e) {
 
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * @param creq
+	 */
+	public void addCSTARequest(CSTARequest creq) {
+		cstaRequests.add(creq);
+	}
+
+	/**
+	 * @param me
+	 */
+	public void AsteriskManagerEventReceived(ManagerEvent me) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	/**
+	 * @param cstareq
+	 */
+	public void CallControlService(CSTARequest cstareq) {
+		// ast call generic function which passes arguments in List,Hashtable!
+
+	}
 }
